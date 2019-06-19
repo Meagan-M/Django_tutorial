@@ -1,4 +1,6 @@
+import uuid # Required for unique book instances
 from django.db import models
+
 
 # Create your models here.
 class Genre(models.Model):
@@ -14,6 +16,19 @@ class Language(models.Model):
     """Model representing a Language (e.g. English, French, Japanese, etc.)"""
     name = models.CharField(max_length=200,
                             help_text="Enter the book's natural language (e.g. English, French, Japanese etc.)")
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+
+class Genre(models.Model):
+    """Model representing a book genre."""
+    name = models.CharField(max_length=200, help_text='Enter a book genre (e.g. Science Fiction)')
+    
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
 
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
@@ -28,10 +43,9 @@ class Book(models.Model):
     
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
-    genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+    genre = models.ManyToManyField('Genre', help_text='Select a genre for this book')
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
-    
     def __str__(self):
         """String for representing the Model object."""
         return self.title
@@ -41,12 +55,11 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
     def display_genre(self):
-            """Create a string for the Genre. This is required to display genre in Admin."""
-            return ', '.join(genre.name for genre in self.genre.all()[:3])
+        """Create a string for the Genre. This is required to display genre in Admin."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
         
-            display_genre.short_description = 'Genre'
+    display_genre.short_description = 'Genre'
 
-import uuid # Required for unique book instances
 
 class BookInstance(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
@@ -94,3 +107,6 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+# For the BookInstance list view, add code to display the book, status, due back date, and id (rather than the default __str__() text).
+# Add an inline listing of Book items to the Author detail view using the same approach as we did for Book/BookInstance. ????????????? Need help with these
