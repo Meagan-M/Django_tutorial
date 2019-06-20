@@ -88,7 +88,9 @@ class BookInstance(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id} ({self.book.title})'
+        return f'{self.id} {self.status} {self.due_back} ({self.book.title})'
+
+        # book, status, due back date, and id 
 
 class Author(models.Model):
     """Model representing an author."""
@@ -107,6 +109,12 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+
+# @admin.register(Book)
+# class BookAdmin(admin.ModelAdmin):
+#     list_display = ('title', 'author', 'display_genre')
+#     inlines = [BooksInstanceInline]
 
 # For the BookInstance list view, add code to display the book, status, due back date, and id (rather than the default __str__() text).
 # Add an inline listing of Book items to the Author detail view using the same approach as we did for Book/BookInstance. ????????????? Need help with these
