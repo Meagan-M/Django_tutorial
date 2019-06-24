@@ -1,3 +1,5 @@
+# Make sure to migrate after making changes to this page! 
+
 import uuid # Required for unique book instances
 from django.db import models
 
